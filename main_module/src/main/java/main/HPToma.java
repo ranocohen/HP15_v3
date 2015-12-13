@@ -1,21 +1,24 @@
 package main;
 
 
+import Toma.TomaCoolingAlgorithm;
+import mutation.MutationManager;
+import mutation.MutationPreDefined;
+import Toma.TomaOptimizer;
+import temperature.TemperatureManager;
+
 import java.io.IOException;
 import java.util.Date;
 
-import mutation.MutationManager;
-import mutation.MutationPreDefined;
-import simpleGA.GAOptimizer;
-
 //import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+
 /**
  * Main class where the program starts from
  * 
  * @author Chen
  * 
  */
-public class HPsimpleGA extends HP{
+public class HPToma extends HP{
 
 	
 
@@ -39,7 +42,8 @@ public class HPsimpleGA extends HP{
 		Configuration config = getConfiguration(argv);
 		OutputPrinter outWriter = getOutWriter(config);
 		MutationManager mutationManager = getMutationManager(config);
-		Optimizer optimizer = new GAOptimizer(outWriter, config, mutationManager);
+		TemperatureManager tempratureManager = new TomaCoolingAlgorithm(config);
+		Optimizer optimizer = new TomaOptimizer(outWriter, config, mutationManager, tempratureManager);
 
 		run(config, optimizer, outWriter);
 		

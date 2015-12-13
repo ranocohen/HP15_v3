@@ -67,7 +67,8 @@ public class Protein extends ArrayList<Monomer> implements Comparable<Protein> {
 			initiateRandomConformation();
 		
 	}
-	
+
+
 	public Conformation getConformation() {
 		return conformation;
 	}
