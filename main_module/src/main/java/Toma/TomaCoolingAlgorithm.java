@@ -3,29 +3,28 @@ package Toma;
 import main.Configuration;
 import temperature.TemperatureManager;
 
-/**
- * Created by ITAY on 13/12/2015.
- */
 public class TomaCoolingAlgorithm implements TemperatureManager {
-    private final float initialTemperature;
-    private float currentTemperature;
+
+    private final float mInitialTemperature;
+    private float mCurrentTemperature;
 
     private final float DELTA = (float)0.998;
 
     public TomaCoolingAlgorithm(Configuration config) {
-        initialTemperature = config.initialTemperature;
-        currentTemperature = initialTemperature;
+        mInitialTemperature = config.initialTemperature;
+        mCurrentTemperature = mInitialTemperature;
     }
     public void reset(){
-        currentTemperature = initialTemperature;
+        mCurrentTemperature = mInitialTemperature;
     }
+    
     public float getNextTemprature() {
-        float out = currentTemperature;
-        currentTemperature = currentTemperature * DELTA;
+        float out = mCurrentTemperature;
+        mCurrentTemperature = mCurrentTemperature * DELTA;
         return out;
     }
 
     public float getCurrentTemperature(){
-        return currentTemperature;
+        return mCurrentTemperature;
     }
 }

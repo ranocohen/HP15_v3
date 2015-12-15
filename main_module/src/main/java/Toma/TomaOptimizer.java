@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * A single run of the Toma algorithm.
  */
-public class TomaOptimizer extends TomaAbstruct {
+public class TomaOptimizer extends TomaAbstract {
 
 	/**
 	 * the graph that represent's the system
@@ -59,8 +59,10 @@ public class TomaOptimizer extends TomaAbstruct {
 	@Override
 	public void execute() throws IOException {
 		TomaProtein in = protein, out;
+
 		long startTime = System.currentTimeMillis();
 		long runningTime;
+
 		log.initialize(runNumber);
 		currentTimeStep = 0;
 		while(currentTimeStep < config.numberOfRepeats) {

@@ -8,19 +8,17 @@ import temperature.TemperatureManager;
 import java.io.IOException;
 import java.util.Random;
 
-public abstract class TomaAbstruct implements Optimizer {
-	public static final boolean debug = true;
+public abstract class TomaAbstract implements Optimizer {
+
+	public static String DEBUG_LOG = TomaAbstract.class.getCanonicalName();
+	public static final boolean DEBUG = true;
 	protected final boolean SHOW_BEST_IN_GUI = true;
+
 	// private GUIGrid guiGrid;
 	// private GUIGrid bestguiGrid;
 	protected RunningView gui;
 
 	protected boolean isFirstInit;
-
-
-
-
-
 
 	// Data for All the Run
 	/** The protein population. */
@@ -46,6 +44,7 @@ public abstract class TomaAbstruct implements Optimizer {
 
 
 	protected TomaCoolingAlgorithm temperatureManager;
+
 	/**
 	 *
 	 *
@@ -57,8 +56,7 @@ public abstract class TomaAbstruct implements Optimizer {
 	 *            the configuration object to load user given data
 	 *
 	 */
-
-	public TomaAbstruct(OutputPrinter fileWriter, Configuration config,
+	public TomaAbstract(OutputPrinter fileWriter, Configuration config,
 						MutationManager mutationManager, TemperatureManager temperatureManager) {
 
 		this.temperatureManager = (TomaCoolingAlgorithm) temperatureManager;
@@ -80,9 +78,10 @@ public abstract class TomaAbstruct implements Optimizer {
 	/**
 	 * create new random population
 	 * 
-	 * @param runNumber
+	 * @param runNumber run number
 	 */
 	public void initiate(int runNumber) {
+
 		Dimensions dimensions = config.dimensions;
 		Sequence sequence = new Sequence(config.sequence);
 		Grid grid = Grid.getInstance(config.sequence.length(), dimensions);
@@ -90,23 +89,13 @@ public abstract class TomaAbstruct implements Optimizer {
 		System.out.println("Initializing run # " + runNumber);
 		protein = new TomaProtein(dimensions, sequence, random, grid, "First");
 		currentTimeStep = 0;
-		//not sure if this is needed, or how
-		if (isFirstInit) { // if this is the first init then create the needed
-							isFirstInit = false;// arrays else. clear the existing one's
-			//population.sort();
-			// Collections.sort(population, Collections.reverseOrder());
+		//// todo: verify with Chen
+		if (isFirstInit) {
+
+			isFirstInit = false;
 		}
 			
 	}
 
-	/**
-	 * Gets the fitest.
-	 * 
-	 * @return the fitest
-	 * @throws IOException 
-	 */
-	
-
-	
 	public abstract void execute() throws IOException;
 }
