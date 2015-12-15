@@ -11,15 +11,15 @@ public class TomaProtein extends Protein {
      * f(i) = 0 - movement is completely free
      * f(i) < 0 - residue involved in a loop defined by HH bond
      */
-    protected int[] mMobilityFactor;
+    protected double[] mMobilityFactor;
 
     TomaProtein(Dimensions dimensions, Sequence sequence, Random random,
                 Grid grid, String name){
         super(dimensions, sequence, random, grid, name, false);
-        mMobilityFactor = new int[sequence.size()];
+        mMobilityFactor = new double[sequence.size()];
     }
 
-    public int getMobilityFactor(int index){
+    public double getMobilityFactor(int index){
         return mMobilityFactor[index];
     }
 
