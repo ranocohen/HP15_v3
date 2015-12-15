@@ -69,7 +69,7 @@ public class TomaOptimizer extends TomaAbstract {
 
 			//TODO: choose random monomer in protein
 			monomerIndex = getRandomMonomer();
-			int mobilityFactor = in.getMobilityFactor(monomerIndex);
+			double mobilityFactor = in.getMobilityFactor(monomerIndex);
 			float temperature = temperatureManager.getCurrentTemperature();
 
 			//TODO: check if (rnd < exp(f(i)/ck))  and act accordingly
@@ -86,7 +86,7 @@ public class TomaOptimizer extends TomaAbstract {
 					currentTimeStep++;
 					// TODO: lower temperature
 					temperatureManager.getNextTemprature();
-					// TODO: recalculate mobility
+					// TODO: recalculate mobility - g(k) should be calculated together with energy calculations
 					// TODO: if new conformation is best so far(lowest energy) replace current best
 
 			}

@@ -1,6 +1,7 @@
 package main;
 
 import javax.vecmath.Vector3f;
+import java.util.HashMap;
 
 /**
  * The basic building block of HP-models.
@@ -17,6 +18,9 @@ public class Monomer {
 	private Vector3f s = new Vector3f(); // help vector to compute position.
 	private Monomer next;
 	private Monomer prev;
+
+	//added a hashmap to hold different values - assuming a need in each different mini-project
+	private HashMap<String, Object> userData;
 
 	// location in the chain -1 if not set
 
@@ -135,6 +139,45 @@ public class Monomer {
 		return "{" + type.toString() + number + relativeDirection.oneLetter
 				+ "}";
 	}
+	// ------- Supporting the addition of the userData HashMap
+	// --------------------------------------------------------
+	private void initUserData(){
+		userData = new HashMap<>();
+	}
+
+	/**
+	 * add a key value pair to userData hash map
+	 * @param key String K to be in map <K,V> with V value
+	 * @param val Object V to be in map <K,V> with K key
+	 */
+	public void addUserData(String key, Object val){
+		if(userData == null){
+			initUserData();
+		}
+		userData.put(key, val);
+	}
+
+	public Object getUserData(String key){
+		return userData.get(key);
+	}
+
+	/**
+	 * replace a key value pair in userData hash map with the same key
+	 * @param key String K to be in map <K,V> with V value
+	 * @param val Object V to be in map <K,V> with K key
+	 */
+	public void updateUserData(String key, Object val){
+		if(userData.replace(key, val) == null)
+			System.out.println("Bad key query");
+	}
+
+	public boolean UserDataContainsKey(String key){
+		return userData.containsKey(key);
+	}
+
+	public boolean UserDataContainsValue(Object val){
+		return userData.containsValue(val);
+	}
 
 	// -------------------------------- Getters and Setters
 	// -----------------------------------------
@@ -193,6 +236,8 @@ public class Monomer {
 	public int getZ() {
 		return z;
 	}
+
+
 }
 
 
