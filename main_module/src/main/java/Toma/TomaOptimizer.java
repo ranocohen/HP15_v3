@@ -77,16 +77,14 @@ public class TomaOptimizer extends TomaAbstract {
 			double rnd = randomDirectionMovement.nextDouble();
 
 				if (rnd < exponent){
-					// TODO: pick a random direction to mutate
-					// TODO: if not valid direction, "continue;"
-					// TODO: if here then direction to mutate is valid thus "apply said mutation"
-					// TODO: replace current protein with mutated one
+					// TODO: mutate current protein
 					// TODO: evaluate energy
 					// TODO: increment timestep
 					currentTimeStep++;
 					// TODO: lower temperature
 					temperatureManager.getNextTemprature();
 					// TODO: recalculate mobility - g(k) should be calculated together with energy calculations
+					protein.updateMobilityFactor();
 					// TODO: if new conformation is best so far(lowest energy) replace current best
 
 			}
