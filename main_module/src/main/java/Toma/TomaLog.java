@@ -8,13 +8,14 @@ import main.Population;
 
 import java.io.IOException;
 
-
+//TODO: Fix TomaLog, not based on population log
+// since we only have 2 proteins and not a population
 public class TomaLog extends Log {
- 	//Trajectory data
 
 	/** The best mobility. */
 	protected float[] bestMobility;
 
+ 	//Trajectory data
 	/** The average fitness. */
 	protected float[] averageMobility;
 

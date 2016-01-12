@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Main class where the program starts from
  * 
- * @author Chen
+ * @author Itay and Ran
  * 
  */
 public class HPToma extends HP{

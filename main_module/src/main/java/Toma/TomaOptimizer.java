@@ -58,7 +58,7 @@ public class TomaOptimizer extends TomaAbstract {
 	 */
 	@Override
 	public void execute() throws IOException {
-		TomaProtein in = protein, out;
+		TomaProtein in = protein;
 
 		long startTime = System.currentTimeMillis();
 		long runningTime;
@@ -67,44 +67,30 @@ public class TomaOptimizer extends TomaAbstract {
 		currentTimeStep = 0;
 		while(currentTimeStep < config.numberOfRepeats) {
 
-			//TODO: choose random monomer in protein
+			//choose random monomer in protein
 			monomerIndex = getRandomMonomer();
 			double mobilityFactor = in.getMobilityFactor(monomerIndex);
 			float temperature = temperatureManager.getCurrentTemperature();
 
-			//TODO: check if (rnd < exp(f(i)/ck))  and act accordingly
+			//check if (rnd < exp(f(i)/ck))  and act accordingly
 			double exponent = Math.exp(mobilityFactor / temperature);
 			double rnd = randomDirectionMovement.nextDouble();
 
 				if (rnd < exponent){
 					// TODO: mutate current protein
 					// TODO: evaluate energy
-					// TODO: increment timestep
+					// increment timestep
 					currentTimeStep++;
-					// TODO: lower temperature
+					// lower temperature
 					temperatureManager.getNextTemprature();
-					// TODO: recalculate mobility - g(k) should be calculated together with energy calculations
+					// recalculate mobility - g(k) should be calculated together with energy calculations
 					protein.updateMobilityFactor();
 					// TODO: if new conformation is best so far(lowest energy) replace current best
 
 			}
 
-			/*if (random.nextFloat() < config.crossoverRate) {
-				in = protein;
-				out = new Protein(protein.dimensions, protein.sequence, protein.random, protein.getGrid() ,
-						"Protein " + runNumber, false);
-				Protein.crossover(in1, in2, out1, out2, random);
-				population.updateLastTwo();
-
-			} else {
-				in1 = population.chooseProtein();
-				if (in1.getConformation().sequenceSize() == 0)
-					throw new RuntimeException("in1.conformation.sequenceSize() == 0\n"+"energy = "+in1.getEnergy());
-				out1 = population.getLast();
-				mutationManager.mutate(in1, out1, 10);
-				population.updateLastTwo();
-			}
-
+			//TODO: uncomment this segment & adjust arguments
+			/*
 			if (SHOW_BEST_IN_GUI
 					&& (this.bestProtein == null || best.getEnergy() < this.bestProtein
 							.getEnergy())) {
@@ -112,28 +98,20 @@ public class TomaOptimizer extends TomaAbstract {
 				this.bestProtein.setConformation(best.getConformation());
 				// this.bestProtein=new Protein(best);
 			
-			}
+			}*/
 
-			runningTime = (System.currentTimeMillis() - startTime);
+			//TODO: uncomment this segment & adjust log.collectStatistics arguments
+			/*runningTime = (System.currentTimeMillis() - startTime);
 			if (currentTimeStep % config.reportEvery == 0) {
 				log.collectStatistics(population, currentTimeStep, numberOfGenerations, runningTime);
-			}*/
+			}
+			log.printRun();
+			runNumber++;*/
 		}
-		log.printRun();
-		runNumber++;
 	}
 
 	public int getRandomMonomer() {
 		return randomMonomerIndex.nextInt(sequenceSize);
 	}
-		
-	/*public void testPopulation() {
-		for (int i = 0; i < population.sequenceSize()-2; i++) {
-			Protein protein = population.getByRef(i);
-			if (protein.getEnergy() == Float.MAX_VALUE)
-				throw new RuntimeException("This is weird "+protein);
-		}
-	}*/
 
-		
 }
