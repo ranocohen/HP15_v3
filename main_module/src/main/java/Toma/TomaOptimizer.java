@@ -58,7 +58,9 @@ public class TomaOptimizer extends TomaAbstract {
 	 */
 	@Override
 	public void execute() throws IOException {
+
 		TomaProtein in = protein;
+		//TomaProtein out;
 
 		long startTime = System.currentTimeMillis();
 		long runningTime;
@@ -77,12 +79,20 @@ public class TomaOptimizer extends TomaAbstract {
 			double rnd = randomDirectionMovement.nextDouble();
 
 				if (rnd < exponent){
+
+
 					// TODO: mutate current protein
+					mutationManager.mutate(in, (TomaProtein) in.clone(), 10);
+
 					// TODO: evaluate energy
+
+
 					// increment timestep
 					currentTimeStep++;
+
 					// lower temperature
 					temperatureManager.getNextTemprature();
+
 					// recalculate mobility - g(k) should be calculated together with energy calculations
 					protein.updateMobilityFactor();
 					// TODO: if new conformation is best so far(lowest energy) replace current best
