@@ -52,7 +52,9 @@ public class TomaProtein extends Protein {
 
     }
 
-    /**@param monomer monomer against check loop existence
+    /**
+     *
+     * @param monomer monomer against check loop existence
      * @param ans 'first' value is the 'new' loops and
      * 'second' value as the closed loops (by this monomer)
      * */
@@ -83,6 +85,12 @@ public class TomaProtein extends Protein {
     }
 
 
+    /**
+     * check {@code monomer1} relative to {@code monomer}
+     * @param ans {@code monomer} pair
+     * @param monomer
+     * @param monomer1
+     */
     private static void updateLoopCount(Pair<Double,Double> ans, Monomer monomer, Monomer monomer1){
         if ((TomaOptimizer.DEBUG) && (monomer1 != null)
                 && (monomer.protein != monomer1.protein)) {
