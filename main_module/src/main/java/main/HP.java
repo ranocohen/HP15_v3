@@ -8,6 +8,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import Toma.TomaLog;
 import gui.DynamiclyConfGui;
 
 public abstract class HP {
@@ -83,7 +84,15 @@ public abstract class HP {
 		System.out.print("Creating output file writers ...");
 		OutputPrinter outWriter;
 		try {
-			outWriter = new PopulationOutputPrinter(config);
+			//outWriter = new PopulationOutputPrinter(config);
+			outWriter = new OutputPrinter(config) {
+				@Override
+				public void printRun(int runNumber, Log log) {
+					writer.println("<run "+
+							"             number=\""+runNumber+"\" "+
+							"numberOfGenerations=\""+config.numberOfGenerations+"\" ");
+				}
+			};
 		} catch (IOException ex1) {
 			throw new RuntimeException("Cannot open output file\n" + ex1);
 		}

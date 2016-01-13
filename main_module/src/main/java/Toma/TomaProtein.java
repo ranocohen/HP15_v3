@@ -8,7 +8,6 @@ public class TomaProtein extends Protein {
 
     private final String USER_DATA = "MobilityFactor";
     private final double INIT_MOBILITY_FACTOR = 0.0;
-
     /**
      * each residue contains f(i) which describes it's mobility.
      * f(i) = 0 - movement is completely free
@@ -21,9 +20,16 @@ public class TomaProtein extends Protein {
         for (Monomer m : this) {
             m.addUserData(USER_DATA, INIT_MOBILITY_FACTOR);
         }
+        setInitConformation(sequence.size());
     }
 
-
+    TomaProtein(TomaProtein protein) {
+        super(protein.dimensions, protein.sequence, protein.random, protein.grid, protein.name, false);
+        this.copyConformation(protein);
+        /*for (int i = 0; i < protein.size(); i++) {
+            this.get(i).addUserData(USER_DATA,  protein.get(i).getUserData(USER_DATA));
+        }*/
+    }
     /**
      * get mobility factor for residue in place @index
      *
@@ -33,6 +39,25 @@ public class TomaProtein extends Protein {
         return (double) this.get(index).getUserData(USER_DATA);
     }
 
+    public void setInitConformation(int size){
+        conformation = new Conformation(size);
+        reset();
+        conformation.clear();
+        boolean first = true;
+        for (Monomer monomer : this) {
+            if (first) {
+                conformation.add(MonomerDirection.FIRST);
+                if (!monomer.setRelativeDirection(MonomerDirection.FIRST))
+                    throw new RuntimeException(
+                            "Why not accept first direction?");
+                first = false;
+            } else {
+                MonomerDirection newDirection = MonomerDirection.FORWARD;
+                monomer.setRelativeDirection(newDirection);
+                conformation.add(monomer.getRelativeDirection());
+            }
+        }
+    }
 
     public void updateMobilityFactor() {
         Double loopSum = 0.0;

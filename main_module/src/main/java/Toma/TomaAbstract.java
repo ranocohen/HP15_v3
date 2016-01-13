@@ -24,6 +24,8 @@ public abstract class TomaAbstract implements Optimizer {
 	/** The protein population. */
 	protected TomaProtein protein;
 
+	protected TomaProtein mutatedProtein;
+
 	/** The mutation manager. */
 	protected MutationManager mutationManager;
 
@@ -68,6 +70,7 @@ public abstract class TomaAbstract implements Optimizer {
 		this.numberOfGenerations = config.numberOfGenerations;
 		this.reportEvery = config.reportEvery;
 		int size = (config.sequence.length() * 2) - 1;
+		//TODO: check if we need to change this
 		this.bestProtein = new TomaProtein(config.dimensions, new Sequence(
 				config.sequence), random, Grid.getInstance(size,
 				config.dimensions), "best protein");
@@ -82,18 +85,16 @@ public abstract class TomaAbstract implements Optimizer {
 	 */
 	public void initiate(int runNumber) {
 
-		Dimensions dimensions = config.dimensions;
-		Sequence sequence = new Sequence(config.sequence);
-		Grid grid = Grid.getInstance(config.sequence.length(), dimensions);
+		Grid grid = Grid.getInstance(config.sequence.length(), config.dimensions);
 
 		System.out.println("Initializing run # " + runNumber);
-		protein = new TomaProtein(dimensions, sequence, random, grid, "First");
+		this.protein = new TomaProtein(config.dimensions, new Sequence(
+				config.sequence), random, grid, "basic protein");
 		currentTimeStep = 0;
-		//// todo: verify with Chen
-		if (isFirstInit) {
+		/*if (isFirstInit) {
 
 			isFirstInit = false;
-		}
+		}*/
 			
 	}
 

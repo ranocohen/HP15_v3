@@ -94,6 +94,9 @@ public class GAOptimizer extends GAabstruct {
 
 			runningTime = (System.currentTimeMillis() - startTime);
 			if (currentGenerarionNum % config.reportEvery == 0) {
+				System.out.println("in1 energy is: " + in1.getEnergy());
+				System.out.println("in1 fitness is: " + in1.getFitness());
+
 				log.collectStatistics(population, currentGenerarionNum, numberOfGenerations, runningTime);
 			}
 		}

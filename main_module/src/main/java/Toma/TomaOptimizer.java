@@ -22,7 +22,6 @@ public class TomaOptimizer extends TomaAbstract {
 	private int runNumber;
 	private Random randomMonomerIndex;
 	private Random randomVal;
-	private Random randomDirectionMovement;
 
 	private final int DIRECTIONS = 3;
 	private int sequenceSize;
@@ -46,6 +45,8 @@ public class TomaOptimizer extends TomaAbstract {
 		sequenceSize = new Sequence(config.sequence).size();
 		log = new TomaLog(config.numberOfRepeats/config.reportEvery+1, fileWriter, gui);
 		runNumber = 0;
+		randomVal = new Random(System.currentTimeMillis());
+		randomMonomerIndex = new Random(System.currentTimeMillis());
 	}
 
 	
@@ -59,33 +60,38 @@ public class TomaOptimizer extends TomaAbstract {
 	@Override
 	public void execute() throws IOException {
 
-		TomaProtein in = protein;
-		//TomaProtein out;
-
 		long startTime = System.currentTimeMillis();
 		long runningTime;
 
 		log.initialize(runNumber);
 		currentTimeStep = 0;
-		while(currentTimeStep < config.numberOfRepeats) {
+		while(currentTimeStep < config.numberOfGenerations) {
 
 			//choose random monomer in protein
 			monomerIndex = getRandomMonomer();
-			double mobilityFactor = in.getMobilityFactor(monomerIndex);
+			double mobilityFactor = protein.getMobilityFactor(monomerIndex);
 			float temperature = temperatureManager.getCurrentTemperature();
 
 			//check if (rnd < exp(f(i)/ck))  and act accordingly
 			double exponent = Math.exp(mobilityFactor / temperature);
-			double rnd = randomDirectionMovement.nextDouble();
+			double rnd = randomVal.nextDouble();
 
 				if (rnd < exponent){
 
 
-					// TODO: mutate current protein
-					mutationManager.mutate(in, (TomaProtein) in.clone(), 10);
+					// mutate current protein,
+					// the mutate function as defined in MutationPreDefined evaluates the energy
+					mutationManager.mutate(protein, bestProtein, 10);
 
-					// TODO: evaluate energy
+					// if new conformation is best so far(lowest energy) replace current best
 
+					/*try {
+						if (protein.getEnergy() < bestProtein.getEnergy()) {
+                            bestProtein = new TomaProtein(protein);
+                        }
+					} catch (Exception e) {
+						e.printStackTrace();
+					}*/
 
 					// increment timestep
 					currentTimeStep++;
@@ -95,11 +101,8 @@ public class TomaOptimizer extends TomaAbstract {
 
 					// recalculate mobility - g(k) should be calculated together with energy calculations
 					protein.updateMobilityFactor();
-					// TODO: if new conformation is best so far(lowest energy) replace current best
 
-			}
-
-			//TODO: uncomment this segment & adjust arguments
+					//TODO: uncomment this segment & adjust arguments
 			/*
 			if (SHOW_BEST_IN_GUI
 					&& (this.bestProtein == null || best.getEnergy() < this.bestProtein
@@ -107,16 +110,16 @@ public class TomaOptimizer extends TomaAbstract {
 				this.bestProtein.reset();
 				this.bestProtein.setConformation(best.getConformation());
 				// this.bestProtein=new Protein(best);
-			
-			}*/
 
-			//TODO: uncomment this segment & adjust log.collectStatistics arguments
-			/*runningTime = (System.currentTimeMillis() - startTime);
-			if (currentTimeStep % config.reportEvery == 0) {
-				log.collectStatistics(population, currentTimeStep, numberOfGenerations, runningTime);
-			}
-			log.printRun();
-			runNumber++;*/
+			}*/
+					runningTime = (System.currentTimeMillis() - startTime);
+				/*	if (currentTimeStep % config.reportEvery == 0) {
+						log.collectStatistics(bestProtein,bestProtein.getEnergy(), currentTimeStep, numberOfGenerations,
+								runningTime, temperature);
+					}
+					log.printRun();
+					runNumber++;
+				*/}
 		}
 	}
 
