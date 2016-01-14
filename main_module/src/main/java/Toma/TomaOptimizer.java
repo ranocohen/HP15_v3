@@ -43,7 +43,7 @@ public class TomaOptimizer extends TomaAbstract {
 		//changed PopulationLog to TomaLog,
 		//changed numberOfGeneration to numberOfRepeats
 		sequenceSize = new Sequence(config.sequence).size();
-		log = new TomaLog(config.numberOfRepeats/config.reportEvery+1, fileWriter, gui);
+		log = new TomaLog(config.numberOfGenerations/config.reportEvery+1, fileWriter, gui);
 		runNumber = 0;
 		randomVal = new Random(System.currentTimeMillis());
 		randomMonomerIndex = new Random(System.currentTimeMillis());
@@ -75,23 +75,16 @@ public class TomaOptimizer extends TomaAbstract {
 			//check if (rnd < exp(f(i)/ck))  and act accordingly
 			double exponent = Math.exp(mobilityFactor / temperature);
 			double rnd = randomVal.nextDouble();
-
+			System.out.println("Mobility of monomer number " + monomerIndex + " is: " + mobilityFactor);
+			//System.out.println("Exp val is: " + exponent);
 				if (rnd < exponent){
 
 
 					// mutate current protein,
 					// the mutate function as defined in MutationPreDefined evaluates the energy
-					mutationManager.mutate(protein, bestProtein, 10);
-
-					// if new conformation is best so far(lowest energy) replace current best
-
-					/*try {
-						if (protein.getEnergy() < bestProtein.getEnergy()) {
-                            bestProtein = new TomaProtein(protein);
-                        }
-					} catch (Exception e) {
-						e.printStackTrace();
-					}*/
+					mutationManager.mutate(protein, mutatedProtein, 10);
+					this.protein.reset();
+					this.protein.setConformation(mutatedProtein.getConformation());
 
 					// increment timestep
 					currentTimeStep++;
@@ -102,25 +95,21 @@ public class TomaOptimizer extends TomaAbstract {
 					// recalculate mobility - g(k) should be calculated together with energy calculations
 					protein.updateMobilityFactor();
 
-					//TODO: uncomment this segment & adjust arguments
-			/*
-			if (SHOW_BEST_IN_GUI
-					&& (this.bestProtein == null || best.getEnergy() < this.bestProtein
-							.getEnergy())) {
-				this.bestProtein.reset();
-				this.bestProtein.setConformation(best.getConformation());
-				// this.bestProtein=new Protein(best);
-
-			}*/
-					runningTime = (System.currentTimeMillis() - startTime);
-				/*	if (currentTimeStep % config.reportEvery == 0) {
-						log.collectStatistics(bestProtein,bestProtein.getEnergy(), currentTimeStep, numberOfGenerations,
-								runningTime, temperature);
+					// if new conformation is best so far(lowest energy) replace current best
+					if (SHOW_BEST_IN_GUI
+							&& (this.bestProtein == null || bestProtein.getEnergy() > protein.getEnergy())) {
+						this.bestProtein.reset();
+						this.bestProtein.setConformation(protein.getConformation());
 					}
-					log.printRun();
-					runNumber++;
-				*/}
+				}
+			runningTime = (System.currentTimeMillis() - startTime);
+			if (currentTimeStep % config.reportEvery == 0) {
+				log.collectStatistics(protein,protein.getEnergy(), currentTimeStep, numberOfGenerations,
+						runningTime, temperature);
+			}
 		}
+		log.printRun();
+		runNumber++;
 	}
 
 	public int getRandomMonomer() {

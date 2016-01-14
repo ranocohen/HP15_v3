@@ -2,6 +2,7 @@ package main;
 
 
 import Toma.TomaCoolingAlgorithm;
+import Toma.singleOutputPrinter;
 import mutation.MutationManager;
 import mutation.MutationPreDefined;
 import Toma.TomaOptimizer;
@@ -61,4 +62,18 @@ public class HPToma extends HP{
 		System.out.println("OK!");
 		return mutationManager;
 	}
+
+	protected static OutputPrinter getOutWriter(Configuration config) {
+		System.out.print("Creating output file writers ...");
+		OutputPrinter outWriter;
+		try {
+			outWriter = new singleOutputPrinter(config);
+
+		} catch (IOException ex1) {
+			throw new RuntimeException("Cannot open output file\n" + ex1);
+		}
+		System.out.println("OK!");
+		return outWriter;
+	}
+
 }

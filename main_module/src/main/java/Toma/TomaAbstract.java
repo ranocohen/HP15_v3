@@ -90,7 +90,12 @@ public abstract class TomaAbstract implements Optimizer {
 		System.out.println("Initializing run # " + runNumber);
 		this.protein = new TomaProtein(config.dimensions, new Sequence(
 				config.sequence), random, grid, "basic protein");
+		this.protein.updateMobilityFactor();
 		currentTimeStep = 0;
+		grid.reset(this.protein);
+		this.mutatedProtein = new TomaProtein(config.dimensions, new Sequence(
+				config.sequence), random, grid, "mutated");
+
 		/*if (isFirstInit) {
 
 			isFirstInit = false;

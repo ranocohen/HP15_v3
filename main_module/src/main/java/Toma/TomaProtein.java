@@ -16,19 +16,19 @@ public class TomaProtein extends Protein {
 
     TomaProtein(Dimensions dimensions, Sequence sequence, Random random,
                 Grid grid, String name) {
-        super(dimensions, sequence, random, grid, name, false);
+        super(dimensions, sequence, random, grid, name, true);
         for (Monomer m : this) {
             m.addUserData(USER_DATA, INIT_MOBILITY_FACTOR);
         }
-        setInitConformation(sequence.size());
+
     }
 
-    TomaProtein(TomaProtein protein) {
-        super(protein.dimensions, protein.sequence, protein.random, protein.grid, protein.name, false);
-        this.copyConformation(protein);
-        /*for (int i = 0; i < protein.size(); i++) {
-            this.get(i).addUserData(USER_DATA,  protein.get(i).getUserData(USER_DATA));
-        }*/
+    TomaProtein(TomaProtein other, String name) {
+        super(other.dimensions, other.sequence, other.random, other.grid, name, false);
+        grid.reset(other);
+        this.setConformation(other.getConformation());
+        //setInitConformation(sequence.size());
+
     }
     /**
      * get mobility factor for residue in place @index
@@ -138,7 +138,7 @@ public class TomaProtein extends Protein {
         }
     }
     private static Double calcMFactor(double k){
-        return 20 / ( 17 + k);
+        return 20 / (17 + k);
     }
 
 }

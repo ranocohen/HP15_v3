@@ -4,7 +4,7 @@ import gui.RunningView;
 import main.Conformation;
 import main.Log;
 import main.OutputPrinter;
-import main.Population;
+import temperature.TemperatureManager;
 
 import java.io.IOException;
 
@@ -14,11 +14,12 @@ public class TomaLog extends Log {
 
 
     protected OutputPrinter outPrinter;
+    protected TemperatureManager temperatureManager;
 
     public TomaLog(int trajectorySize, OutputPrinter outPrinter, RunningView gui) {
         super(trajectorySize, outPrinter, gui);
         this.outPrinter = outPrinter;
-
+        this.temperatureManager = temperaturemanager;
     }
 
     public void initialize(int runNumber) {
@@ -43,9 +44,9 @@ public class TomaLog extends Log {
      *
      * @return the average fitness
      */
-    /*public float getTemperature() {
-        return temperaturemanager.
-    }*/
+    public float getTemperature() {
+        return ((TomaCoolingAlgorithm) temperatureManager).getCurrentTemperature();
+    }
 
     public void collectStatistics(TomaProtein protein, float bestEnergy, int currentTimestep, int numberOfGenerations, Long runningTime, float temperature) throws IOException {
         super.collectStatistics(protein, bestEnergy, 0, 0, currentTimestep, numberOfGenerations, runningTime, temperature);
