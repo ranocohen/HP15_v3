@@ -43,7 +43,7 @@ public class TomaOptimizer extends TomaAbstract {
 		//changed PopulationLog to TomaLog,
 		//changed numberOfGeneration to numberOfRepeats
 		sequenceSize = new Sequence(config.sequence).size();
-		log = new TomaLog(config.numberOfGenerations/config.reportEvery+1, fileWriter, gui);
+		log = new TomaLog(config.numberOfGenerations/config.reportEvery+1, fileWriter, temperatureManager, gui);
 		runNumber = 0;
 		randomVal = new Random(System.currentTimeMillis());
 		randomMonomerIndex = new Random(System.currentTimeMillis());
@@ -75,7 +75,7 @@ public class TomaOptimizer extends TomaAbstract {
 			//check if (rnd < exp(f(i)/ck))  and act accordingly
 			double exponent = Math.exp(mobilityFactor / temperature);
 			double rnd = randomVal.nextDouble();
-			System.out.println("Mobility of monomer number " + monomerIndex + " is: " + mobilityFactor);
+			//System.out.println("Mobility of monomer number " + monomerIndex + " is: " + mobilityFactor);
 			//System.out.println("Exp val is: " + exponent);
 				if (rnd < exponent){
 
@@ -85,7 +85,7 @@ public class TomaOptimizer extends TomaAbstract {
 					mutationManager.mutate(protein, mutatedProtein, 10);
 					this.protein.reset();
 					this.protein.setConformation(mutatedProtein.getConformation());
-
+					//System.out.println("grid's proteing == null??? " + protein.getGrid().getCurrentProteinOnGrid() == null);
 					// increment timestep
 					currentTimeStep++;
 
@@ -94,10 +94,11 @@ public class TomaOptimizer extends TomaAbstract {
 
 					// recalculate mobility - g(k) should be calculated together with energy calculations
 					protein.updateMobilityFactor();
+					this.protein.getGrid().reset(protein);
 
 					// if new conformation is best so far(lowest energy) replace current best
 					if (SHOW_BEST_IN_GUI
-							&& (this.bestProtein == null || bestProtein.getEnergy() > protein.getEnergy())) {
+							&& (this.bestProtein == null || bestProtein.getEnergy() >= protein.getEnergy())) {
 						this.bestProtein.reset();
 						this.bestProtein.setConformation(protein.getConformation());
 					}

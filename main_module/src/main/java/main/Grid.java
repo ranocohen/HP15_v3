@@ -246,4 +246,23 @@ public class Grid {
 					}
 		return (!found);
 	}
+
+	//Extension to grid used to safely check both directions (cell +1 and cell -1)
+
+	public boolean minXEdge(int x) {
+		if (x < minX)
+			throw new RuntimeException("x>maxX" + x + ">" + maxX);
+		return (x == minX);
+	}
+	public boolean minYEdge(int y) {
+		if (y < minY)
+			throw new RuntimeException("y>maxY" + y + ">" + maxY);
+		return (y == minY);
+	}
+	public boolean minZEdge(int z) {
+		if (z < minZ)
+			throw new RuntimeException("z>maxZ" + z + ">" + maxZ);
+		return (z == minZ);
+	}
+
 }

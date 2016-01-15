@@ -16,7 +16,7 @@ public class TomaLog extends Log {
     protected OutputPrinter outPrinter;
     protected TemperatureManager temperatureManager;
 
-    public TomaLog(int trajectorySize, OutputPrinter outPrinter, RunningView gui) {
+    public TomaLog(int trajectorySize, OutputPrinter outPrinter, TemperatureManager temperatureManager, RunningView gui) {
         super(trajectorySize, outPrinter, gui);
         this.outPrinter = outPrinter;
         this.temperatureManager = temperaturemanager;

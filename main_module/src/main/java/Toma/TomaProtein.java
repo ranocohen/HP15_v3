@@ -36,6 +36,7 @@ public class TomaProtein extends Protein {
      * @param index target residue
      */
     public double getMobilityFactor(int index) {
+       // System.out.println(get(index).getUserData(USER_DATA));
         return (double) this.get(index).getUserData(USER_DATA);
     }
 
@@ -61,6 +62,11 @@ public class TomaProtein extends Protein {
 
     public void updateMobilityFactor() {
         Double loopSum = 0.0;
+        if (grid.getCurrentProteinOnGrid() == null){
+            for (Monomer m : this){
+                grid.update(m);
+            }
+        }
         for (Monomer monomer : this) {
             Pair<Double, Double> ans = new Pair<>(0.0, 0.0);
             countLoops(monomer, ans);
@@ -69,11 +75,15 @@ public class TomaProtein extends Protein {
                 loopSum -= ans.getFirst();
             }
             monomer.updateUserData(USER_DATA, loopSum);
+           // System.out.println("monomer number " + monomer.getNumber() + " has mobility factor of " + monomer.getUserData(USER_DATA));
             //assuming closer of a loop if we find a loop vs a former (index wise) monomer
             if ( ans.getSecond() > 0.0){
                 loopSum += ans.getSecond();
             }
         }
+
+
+       // System.out.println("protein is: " + name);
 
     }
 
@@ -86,6 +96,14 @@ public class TomaProtein extends Protein {
     public void countLoops(Monomer monomer, Pair<Double,Double> ans) {
         //checking vs all monomers (4 directions) in bound (on the grid)
         Monomer monomer1;
+        if (grid.getCurrentProteinOnGrid() == null) {
+           try{
+                grid.update(monomer);
+           }
+           catch (Exception e) {
+               throw new RuntimeException("grid does not have a protein (null value)");
+           }
+        }
         if (monomer.type != MonomerType.H)
             return;
         int x = monomer.getX();
@@ -95,7 +113,7 @@ public class TomaProtein extends Protein {
             monomer1 = grid.getCell(x + 1, y, z);
             updateLoopCount(ans, monomer, monomer1);
         }
-        if (x > 0) {
+        if (!grid.minXEdge(x)) {
             monomer1 = grid.getCell(x - 1, y, z);
             updateLoopCount(ans, monomer, monomer1);
         }
@@ -103,7 +121,7 @@ public class TomaProtein extends Protein {
             monomer1 = grid.getCell(x, y + 1, z);
             updateLoopCount(ans, monomer, monomer1);
         }
-        if (y > 0){
+        if (!grid.minYEdge(y)){
             monomer1 = grid.getCell(x, y - 1, z);
             updateLoopCount(ans, monomer, monomer1);
         }
@@ -117,6 +135,7 @@ public class TomaProtein extends Protein {
      * @param monomer1
      */
     private static void updateLoopCount(Pair<Double,Double> ans, Monomer monomer, Monomer monomer1){
+
         if ((TomaOptimizer.DEBUG) && (monomer1 != null)
                 && (monomer.protein != monomer1.protein)) {
             throw new RuntimeException("Two proteins on the grid\n"
