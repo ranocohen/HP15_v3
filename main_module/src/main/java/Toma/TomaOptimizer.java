@@ -102,12 +102,13 @@ public class TomaOptimizer extends TomaAbstract {
 						this.bestProtein.reset();
 						this.bestProtein.setConformation(protein.getConformation());
 					}
+					runningTime = (System.currentTimeMillis() - startTime);
+					if (currentTimeStep % config.reportEvery == 0) {
+						System.out.println(currentTimeStep);
+						log.collectStatistics(protein,protein.getEnergy(), currentTimeStep, numberOfGenerations,
+								runningTime, temperature);
+					}
 				}
-			runningTime = (System.currentTimeMillis() - startTime);
-			if (currentTimeStep % config.reportEvery == 0) {
-				log.collectStatistics(protein,protein.getEnergy(), currentTimeStep, numberOfGenerations,
-						runningTime, temperature);
-			}
 		}
 		log.printRun();
 		runNumber++;

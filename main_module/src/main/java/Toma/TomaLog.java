@@ -15,6 +15,7 @@ public class TomaLog extends Log {
 
     protected OutputPrinter outPrinter;
     protected TemperatureManager temperatureManager;
+    protected float temperature = 0;
 
     public TomaLog(int trajectorySize, OutputPrinter outPrinter, TemperatureManager temperatureManager, RunningView gui) {
         super(trajectorySize, outPrinter, gui);
@@ -45,12 +46,12 @@ public class TomaLog extends Log {
      * @return the average fitness
      */
     public float getTemperature() {
-        return ((TomaCoolingAlgorithm) temperatureManager).getCurrentTemperature();
+        return temperature;
     }
 
     public void collectStatistics(TomaProtein protein, float bestEnergy, int currentTimestep, int numberOfGenerations, Long runningTime, float temperature) throws IOException {
         super.collectStatistics(protein, bestEnergy, 0, 0, currentTimestep, numberOfGenerations, runningTime, temperature);
-
+        this.temperature = temperature;
     }
 
 }
