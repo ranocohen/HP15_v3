@@ -141,10 +141,10 @@ public class RunningView extends JFrame {
 	 *            the protein to be showed on current protein grid
 	 */
 	public void buildCurrentGrid(Protein prot) {
-		if (!prot.equals(current_protain.getProteinPresented())) {
+		//if (!prot.equals(current_protain.getProteinPresented())) {
 			this.current_protain.buildGrid(prot, 2);
 			this.current_protain.run();
-		}
+		//}
 
 	}
 
