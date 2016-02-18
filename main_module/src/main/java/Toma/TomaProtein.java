@@ -1,13 +1,15 @@
 package Toma;
 
 import main.*;
-
+import java.lang.Exception;
 import java.util.Random;
 
 public class TomaProtein extends Protein {
-
     private final String USER_DATA = "MobilityFactor";
+    private RuntimeException up = new RuntimeException("g(k) should never be positive!");
     private final double INIT_MOBILITY_FACTOR = 0.0;
+    private Pair<Double, Double> pair = new Pair<>(0.0, 0.0);
+
     /**
      * each residue contains f(i) which describes it's mobility.
      * f(i) = 0 - movement is completely free
@@ -60,24 +62,31 @@ public class TomaProtein extends Protein {
         }
     }
 
-    public void updateMobilityFactor() {
-        Pair<Double, Double> ans = new Pair<>(0.0, 0.0);
-        Double loopSum = 0.0;
+    public void updateMobilityFactor(){
         if (grid.getCurrentProteinOnGrid() == null){
             for (Monomer m : this){
                 grid.update(m);
             }
         }
+        Double loopSum = 0.0;
         for (Monomer monomer : this) {
-            ans.setFirst(0.0);
-            ans.setSecond(0.0);
-            countLoops(monomer, ans);
+            pair.setFirst(0.0);
+            pair.setSecond(0.0);
+            countLoops(monomer, pair);
             //assuming a 'new' loop if we find a loop vs a later (index wise) monomer
-            loopSum -= ans.getFirst();
+            if (pair.getFirst() > 0){
+                loopSum -= pair.getFirst();
+            }
+                if (loopSum > 0.0) {
+                    System.out.println("loopSum val is: " + loopSum + " for monomer: " + monomer.toString());
+                    throw up;
+                }
             monomer.updateUserData(USER_DATA, loopSum);
            // System.out.println("monomer number " + monomer.getNumber() + " has mobility factor of " + monomer.getUserData(USER_DATA));
             //assuming closer of a loop if we find a loop vs a former (index wise) monomer
-            loopSum += ans.getSecond();
+            if (pair.getFirst() > 0){
+                loopSum += pair.getSecond();
+            }
         }
 
 

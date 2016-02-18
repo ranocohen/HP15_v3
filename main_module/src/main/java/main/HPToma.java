@@ -3,7 +3,7 @@ package main;
 
 import Toma.TomaCoolingAlgorithm;
 import Toma.singleOutputPrinter;
-import mutation.MutationManager;
+import Toma.TomaMutationManager;
 import mutation.MutationPreDefined;
 import Toma.TomaOptimizer;
 import temperature.TemperatureManager;
@@ -42,7 +42,7 @@ public class HPToma extends HP{
 		loadConfGui(argv[0]);
 		Configuration config = getConfiguration(argv);
 		OutputPrinter outWriter = getOutWriter(config);
-		MutationManager mutationManager = getMutationManager(config);
+		TomaMutationManager mutationManager = getMutationManager(config);
 		TemperatureManager tempratureManager = new TomaCoolingAlgorithm(config);
 		Optimizer optimizer = new TomaOptimizer(outWriter, config, mutationManager, tempratureManager);
 
@@ -56,9 +56,9 @@ public class HPToma extends HP{
 
 	
 	
-	private static MutationManager getMutationManager(Configuration config) {
+	private static TomaMutationManager getMutationManager(Configuration config) {
 		System.out.print("Loading Mutation Manager ...");
-		MutationManager mutationManager = new MutationManager(new MutationPreDefined(config));
+		TomaMutationManager mutationManager = new TomaMutationManager(new MutationPreDefined(config));
 		System.out.println("OK!");
 		return mutationManager;
 	}

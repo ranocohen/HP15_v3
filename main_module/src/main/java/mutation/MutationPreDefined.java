@@ -408,7 +408,7 @@ public class MutationPreDefined implements MutationAlgorithm {
 	 * @param max_tries
 	 *            - max tries for creating a mutation.
 	 */
-	public void mutate(Protein protein, Protein out, int max_tries) {
+	public void mutate(Protein protein, Protein out, int max_tries, int monomerIndex) {
 		if (protein.size() < 10)
 			throw new RuntimeException("A protein of length "+protein.size()+" Shorter than the predefined mutations");
 		if (protein.getConformation().size() == 0)
@@ -435,12 +435,19 @@ public class MutationPreDefined implements MutationAlgorithm {
 		while (nTries < max_tries) { // upon success the method will return
 			nTries++;
 			out.reset();
-			// Generate a number between [1..protein.size-2]
-			mutationLength = random.nextInt(Math.min(protein.size() - 1,
-					mutationLibraries.length) - 2) + 2;
+			if(monomerIndex > 0) {
+				mutationLength = random.nextInt(Math.min(protein.size() - monomerIndex,
+						mutationLibraries.length) - 2) + 2;
+			}
+			else{
+				// Generate a number between [1..protein.size-2]
+				mutationLength = random.nextInt(Math.min(protein.size() - 1,
+						mutationLibraries.length) - 2) + 2;
+			}
 			// the start monomer may be between 1 and protein size- mutation
 			// length
-			mutationStartMonomer = random.nextInt(protein.size()
+			if (monomerIndex > 0) mutationStartMonomer = monomerIndex;
+			else mutationStartMonomer = random.nextInt(protein.size()
 					- mutationLength - 1) + 1;
 			mutationLastMonomer = mutationLength + mutationStartMonomer - 1;
 			start = protein.get(mutationStartMonomer).getR(); // get position

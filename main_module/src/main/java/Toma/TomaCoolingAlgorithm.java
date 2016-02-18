@@ -21,6 +21,7 @@ public class TomaCoolingAlgorithm implements TemperatureManager {
     public float getNextTemprature() {
         float out = mCurrentTemperature;
         mCurrentTemperature = mCurrentTemperature * DELTA;
+        //System.out.println("new temp is: " + mCurrentTemperature);
         return out;
     }
 

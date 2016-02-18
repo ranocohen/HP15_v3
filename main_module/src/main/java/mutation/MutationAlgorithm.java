@@ -11,7 +11,7 @@ import main.Protein;
  *
  */
 public interface MutationAlgorithm {
-	public void mutate(Protein inProtein, Protein outProtein, int maxTries);
+	public void mutate(Protein inProtein, Protein outProtein, int maxTries, int monomerIndex);
 	public int getNumOfFailures();
 	public int getNumOfIterations();
 }

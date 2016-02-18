@@ -27,7 +27,7 @@ public abstract class TomaAbstract implements Optimizer {
 	protected TomaProtein mutatedProtein;
 
 	/** The mutation manager. */
-	protected MutationManager mutationManager;
+	protected TomaMutationManager mutationManager;
 
 	/** The current time step num. */
 	protected int currentTimeStep;
@@ -59,7 +59,7 @@ public abstract class TomaAbstract implements Optimizer {
 	 *
 	 */
 	public TomaAbstract(OutputPrinter fileWriter, Configuration config,
-						MutationManager mutationManager, TemperatureManager temperatureManager) {
+						TomaMutationManager mutationManager, TemperatureManager temperatureManager) {
 
 		this.temperatureManager = (TomaCoolingAlgorithm) temperatureManager;
 		this.config = config;

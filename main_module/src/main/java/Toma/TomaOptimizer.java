@@ -38,7 +38,7 @@ public class TomaOptimizer extends TomaAbstract {
 	 *            the mutation manager of the system
 	 */
 	public TomaOptimizer(OutputPrinter fileWriter, Configuration config,
-						 MutationManager mutationManager, TemperatureManager temperatureManager) {
+						 TomaMutationManager mutationManager, TemperatureManager temperatureManager) {
 		super(fileWriter, config, mutationManager, temperatureManager);
 		//changed PopulationLog to TomaLog,
 		//changed numberOfGeneration to numberOfRepeats
@@ -75,17 +75,12 @@ public class TomaOptimizer extends TomaAbstract {
 			//check if (rnd < exp(f(i)/ck))  and act accordingly
 			double exponent = Math.exp(mobilityFactor / temperature);
 			double rnd = randomVal.nextDouble();
-			//System.out.println("Mobility of monomer number " + monomerIndex + " is: " + mobilityFactor);
-			//System.out.println("Exp val is: " + exponent);
 				if (rnd < exponent){
-
-
 					// mutate current protein,
 					// the mutate function as defined in MutationPreDefined evaluates the energy
-					mutationManager.mutate(protein, mutatedProtein, 10);
+					mutationManager.mutate(protein, mutatedProtein, 10, monomerIndex);
 					this.protein.reset();
 					this.protein.setConformation(mutatedProtein.getConformation());
-					//System.out.println("grid's proteing == null??? " + protein.getGrid().getCurrentProteinOnGrid() == null);
 					// increment timestep
 					currentTimeStep++;
 
@@ -104,7 +99,6 @@ public class TomaOptimizer extends TomaAbstract {
 					}
 					runningTime = (System.currentTimeMillis() - startTime);
 					if (currentTimeStep % config.reportEvery == 0) {
-						System.out.println(currentTimeStep);
 						log.collectStatistics(protein,protein.getEnergy(), currentTimeStep, numberOfGenerations,
 								runningTime, temperature);
 					}
@@ -115,7 +109,7 @@ public class TomaOptimizer extends TomaAbstract {
 	}
 
 	public int getRandomMonomer() {
-		return randomMonomerIndex.nextInt(sequenceSize);
+		return randomMonomerIndex.nextInt(sequenceSize - 2);
 	}
 
 }
