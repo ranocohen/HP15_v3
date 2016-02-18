@@ -61,6 +61,7 @@ public class TomaProtein extends Protein {
     }
 
     public void updateMobilityFactor() {
+        Pair<Double, Double> ans = new Pair<>(0.0, 0.0);
         Double loopSum = 0.0;
         if (grid.getCurrentProteinOnGrid() == null){
             for (Monomer m : this){
@@ -68,18 +69,15 @@ public class TomaProtein extends Protein {
             }
         }
         for (Monomer monomer : this) {
-            Pair<Double, Double> ans = new Pair<>(0.0, 0.0);
+            ans.setFirst(0.0);
+            ans.setSecond(0.0);
             countLoops(monomer, ans);
             //assuming a 'new' loop if we find a loop vs a later (index wise) monomer
-            if ( ans.getFirst() > 0.0){
-                loopSum -= ans.getFirst();
-            }
+            loopSum -= ans.getFirst();
             monomer.updateUserData(USER_DATA, loopSum);
            // System.out.println("monomer number " + monomer.getNumber() + " has mobility factor of " + monomer.getUserData(USER_DATA));
             //assuming closer of a loop if we find a loop vs a former (index wise) monomer
-            if ( ans.getSecond() > 0.0){
-                loopSum += ans.getSecond();
-            }
+            loopSum += ans.getSecond();
         }
 
 
